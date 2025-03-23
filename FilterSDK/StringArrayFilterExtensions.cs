@@ -8,32 +8,37 @@ public static class StringArrayFilterExtensions
         return words.Where(w => w.Length >= length).ToArray();
     }
 
-    public static string[] FilterOutWordsWithoutCharacter(this string[] words, char mustIncludeChar)
+    public static string[] FilterOutWordsWithCharacter(this string[] words, char mustIncludeChar)
     {
-        return words.Where(w => w.ToLower().Contains(char.ToLower(mustIncludeChar))).ToArray();
+        return words.Where(w => !w.ToLower().Contains(char.ToLower(mustIncludeChar))).ToArray();
     }
 
-    public static string[] FilterOutWordsWithMiddleVowl(this string[] words)
+    public static string[] FilterOutWordsWithMiddleVowel(this string[] words)
     {
-        const string vowels = "aeiou";
-        
+        HashSet<char> vowels = new() { 'a', 'e', 'i', 'o', 'u' };
         var result = new List<string>();
 
-        foreach (var w in words)
+        foreach (var word in words)
         {
-            if (w.Length % 2 == 1)
+            int len = word.Length;
+            if (len > 0)
             {
-                if (!vowels.Contains(w[int.Parse(((w.Length / 2) - 0.5).ToString())])) result.Add(w);
-            }
-            else
-            {
-                if (!vowels.Contains(w[int.Parse(((w.Length / 2)- 1).ToString())]) &&
-                    !vowels.Contains(w[int.Parse((w.Length / 2).ToString())]))  result.Add(w);
+                if (len % 2 == 1)  // Odd length
+                {
+                    int mid = len / 2;
+                    if (!vowels.Contains(word[mid]))
+                        result.Add(word);
+                }
+                else  // Even length
+                {
+                    int mid1 = (len / 2) - 1, mid2 = len / 2;
+                    if (!vowels.Contains(word[mid1]) && !vowels.Contains(word[mid2]))
+                        result.Add(word);
+                }
             }
         }
 
         return result.ToArray();
-
     }
 
 }
