@@ -21,7 +21,7 @@ public static class StringArrayFilterExtensions
 
         foreach (var w in words)
         {
-            if (w.Length % 2 == 0)
+            if (w.Length % 2 == 1)
             {
                 if (!vowels.Contains(w[int.Parse(((w.Length / 2) - 0.5).ToString())])) result.Add(w);
             }
