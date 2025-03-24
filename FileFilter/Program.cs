@@ -1,4 +1,5 @@
 ﻿using FilterSDK;
+using System.Text.RegularExpressions;
 
 var result = new List<string>();
 
@@ -9,7 +10,12 @@ using (var fStream = new FileStream(".\\Resources\\new 24.txt", FileMode.Open, F
         string lineOfText = string.Empty;
         while ((lineOfText = file.ReadLine()) != null)
         {
-            var lineResult = lineOfText.Split(" ");
+            var lineResult = lineOfText.Split([' ', '.', ',']);
+
+            for (var i = 0; i < lineResult.Length; i++)
+            {
+                lineResult[i] = Regex.Replace(lineResult[i], "[^a-zA-Z0-9 ]", "").ToLower();
+            }
 
             lineResult = lineResult.FilterOutWordsWithLengthLessThan(3)
                            .FilterOutWordsWithCharacter('t')
@@ -31,6 +37,6 @@ using (var fStream = new FileStream(".\\Resources\\new 24.txt", FileMode.Open, F
 //               .FilterOutWordsWithCharacter('t')
 //               .FilterOutWordsWithMiddleVowel();
 
-Console.WriteLine(string.Join(", ", result));
+Console.WriteLine(string.Join(" ", result));
 Console.ReadLine();
 
